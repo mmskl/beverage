@@ -17,7 +17,8 @@ var rootCmd = &cobra.Command{
 	Short: "podcast manager and aggregator",
 	Long: `beverage allows you to manage your podcast list and sync track between devices.
 
-    beverate add podcast-name rss-url`,
+    beverage upgrade-schema
+    beverage add podcast-name rss-url`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
