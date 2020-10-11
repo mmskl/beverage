@@ -1,13 +1,15 @@
 package DB
 
 import (
-    "fmt"
     "log"
+    "fmt"
+    "os"
     "gorm.io/gorm"
     "gorm.io/driver/sqlite"
+
 )
 
-const db_path = "../../data/beverage.db"
+const db_path = "./data/beverage.db"
 
 type ConnectionType struct {
     db *gorm.DB
@@ -15,23 +17,55 @@ type ConnectionType struct {
 
 var Connection ConnectionType
 
-func Connect(config *gorm.Config) *ConnectionType {
-    fmt.Println("connecting to DB")
+var ConnectionConfig *gorm.Config
 
-    if (!fileExists(db_path)) {
-        db_path
+
+
+func SetCustomConnectConfig(config *gorm.Config) {
+    ConnectionConfig = config
+}
+
+func Connect() *ConnectionType {
+
+    var err error
+    var db *gorm.DB
+
+    if (ConnectionConfig != nil) {
+        db, err = gorm.Open(sqlite.Open(db_path), ConnectionConfig)
+    } else {
+        config := gorm.Config{}
+        db, err = gorm.Open(sqlite.Open(db_path), &config)
     }
 
-    db, err := gorm.Open(sqlite.Open(db_path), config)
+    if (!fileExists(db_path)) {
+        // @TODO move to init.sql file
+        // db_path
+    }
+
     if err != nil {
         log.Fatal("Failed to init db:", err)
     }
 
-    Connection := &ConnectionType{db: db}
+    Connection := ConnectionType{db: db}
 
-    return Connection
+    return &Connection
 }
 
+func fileExists(filename string) bool {
+    info, err := os.Stat(filename)
+    if os.IsNotExist(err) {
+        return false
+    }
+    return !info.IsDir()
+}
+
+
+
+func (c *ConnectionType) AddEntry(entry *Entry) *ConnectionType {
+    result := c.db.Create(entry)
+    fmt.Println(result)
+    return c
+}
 
 
 

@@ -17,37 +17,36 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	_ "fmt"
+
 	"github.com/spf13/cobra"
     "github.com/mmskl/beverage/internal/DB"
 )
 
-// upgradeSchemaCmd represents the upgradeSchema command
-var upgradeSchemaCmd = &cobra.Command{
-	Use:   "upgrade-schema",
-    Aliases: []string{"upgrade-schema", "upgradeSchema"},
-	Short: "Upgrade schema DB according to models",
-	Long: `Due to application updates structure of models may change.
-    To keep it in sync with database run this command.
+// addCmd represents the add command
+var addCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Add entry",
+	Long: `Add entry:
 
-beverage upgrade-schema - to show what changes will be made
-beverage upgrade-schema --force - to perform upgrade
-`,
+beverage add "entry's name" url`,
 	Run: func(cmd *cobra.Command, args []string) {
-        DB.DoUpgrade()
+        entry := DB.Entry{Name: args[0], Url: args[1]}
+        db := DB.Connect()
+        db.AddEntry(&entry)
 	},
 }
 
-
 func init() {
-	rootCmd.AddCommand(upgradeSchemaCmd)
+	rootCmd.AddCommand(addCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// upgradeSchemaCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// addCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// upgradeSchemaCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

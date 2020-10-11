@@ -8,18 +8,19 @@ import (
 type Schema struct {}
 
 
-func (s *Schema) Upgrade() {
+func (s *Schema) upgrade() {
     fmt.Println("Schema.Upgrade()")
     config := gorm.Config{
         DisableForeignKeyConstraintWhenMigrating: true,
     }
 
-    c := Connect(&config)
-    c.db.AutoMigrate(&EntryModel{})
+    SetCustomConnectConfig(&config)
+    c := Connect()
+    c.db.AutoMigrate(&Entry{})
 
 }
 
 func DoUpgrade() {
     s := Schema{}
-    s.Upgrade()
+    s.upgrade()
 }
