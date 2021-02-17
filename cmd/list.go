@@ -17,44 +17,34 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	_ "fmt"
-	"os"
+	"fmt"
+	_ "os"
 
 	"github.com/spf13/cobra"
     "github.com/mmskl/beverage/internal/DB"
 )
 
-// addCmd represents the add command
-var addCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Add entry",
-	Long: `Add entry:
+// listCmd represents the list command
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List entries",
+	Long: `list entries:
 
-beverage add {name} {url}`,
-    PreRun: func(cmd *cobra.Command, args []string) {
-
-        if len(args) != 2 {
-            cmd.Help()
-            os.Exit(0)
-        }
-    },
+beverage list`,
 	Run: func(cmd *cobra.Command, args []string) {
-        entry := DB.Entry{Name: args[0], Url: args[1]}
         db := DB.Connect()
-        db.AddEntry(&entry)
+        entries := db.ListEntries()
+
+
+    for num, e := range entries {
+        num++
+        fmt.Printf("%d. %s - %s\n", num, e.Name, e.Url)
+    }
+
+
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(addCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// addCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.AddCommand(listCmd)
 }
