@@ -2,11 +2,10 @@ package DB
 
 import (
     "log"
-    "fmt"
+    _ "fmt"
     "os"
     "gorm.io/gorm"
     "gorm.io/driver/sqlite"
-
 )
 
 const db_path = "./data/beverage.db"
@@ -62,9 +61,17 @@ func fileExists(filename string) bool {
 
 
 func (c *ConnectionType) AddEntry(entry *Entry) *ConnectionType {
-    result := c.db.Create(entry)
-    fmt.Println(result)
+    c.db.Create(entry)
     return c
+}
+
+
+func (c *ConnectionType) ListEntries() []Entry {
+
+	entries := []Entry{}
+    c.db.Find(&entries)
+
+    return entries
 }
 
 
