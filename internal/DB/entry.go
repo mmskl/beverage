@@ -2,7 +2,7 @@ package DB
 
 import "gorm.io/gorm"
 
-type Entry struct{
+type Entry struct {
     gorm.Model
     Id int `gorm:"primary_key"`
     Name string

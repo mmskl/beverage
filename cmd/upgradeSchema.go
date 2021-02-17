@@ -17,6 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+    "fmt"
 	"github.com/spf13/cobra"
     "github.com/mmskl/beverage/internal/DB"
 )
@@ -34,6 +35,7 @@ beverage upgrade-schema --force - to perform upgrade
 `,
 	Run: func(cmd *cobra.Command, args []string) {
         DB.DoUpgrade()
+        fmt.Printf("Schema upgraded")
 	},
 }
 

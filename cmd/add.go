@@ -17,7 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	_ "fmt"
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -42,6 +42,7 @@ beverage add {name} {url}`,
         entry := DB.Entry{Name: args[0], Url: args[1]}
         db := DB.Connect()
         db.AddEntry(&entry)
+        fmt.Println("Created entry %s", entry.Name)
 	},
 }
 
